@@ -1,0 +1,57 @@
+import pygame
+import random
+
+# inicialização do Pygame
+pygame.init()
+
+# configuração da tela
+screen_width = 600
+screen_height = 400
+screen = pygame.display.set_mode((screen_width, screen_height))
+pygame.display.set_caption("Meu Jogo")
+
+# cores
+black = (0, 0, 0)
+white = (255, 255, 255)
+
+# posição inicial do jogador
+player_x = 300
+player_y = 350
+
+# posição inicial do obstáculo
+obstacle_x = random.randint(0, screen_width)
+obstacle_y = 0
+
+# loop principal do jogo
+running = True
+while running:
+    # tratamento de eventos
+    for event in pygame.event.get():
+        if event.type == pygame.QUIT:
+            running = False
+    
+    # atualização da posição do jogador
+    keys = pygame.key.get_pressed()
+    if keys[pygame.K_LEFT]:
+        player_x -= 5
+    if keys[pygame.K_RIGHT]:
+        player_x += 5
+    
+    # atualização da posição do obstáculo
+    obstacle_y += 5
+    if obstacle_y > screen_height:
+        obstacle_x = random.randint(0, screen_width)
+        obstacle_y = 0
+    
+    # desenho dos objetos na tela
+    screen.fill(black)
+    pygame.draw.rect(screen, white, (player_x, player_y, 50, 50))
+    pygame.draw.rect(screen, white, (obstacle_x, obstacle_y, 50, 50))
+    pygame.display.flip()
+    
+    # verificação de colisão
+    if player_x < obstacle_x + 50 and player_x + 50 > obstacle_x and player_y < obstacle_y + 50 and player_y + 50 > obstacle_y:
+        running = False
+
+# finalização do Pygame
+pygame.quit()
